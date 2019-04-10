@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.webrtc.MediaStream;
+import org.webrtc.RendererCommon;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 
@@ -40,7 +41,7 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
     private static final int REMOTE_Y = 0;
     private static final int REMOTE_WIDTH = 100;
     private static final int REMOTE_HEIGHT = 100;
-    private VideoRendererGui.ScalingType scalingType = VideoRendererGui.ScalingType.SCALE_ASPECT_FILL;
+    private RendererCommon.ScalingType scalingType = RendererCommon.ScalingType.SCALE_ASPECT_FILL;
     private GLSurfaceView vsv;
     private VideoRenderer.Callbacks localRender;
     private VideoRenderer.Callbacks remoteRender;
@@ -48,7 +49,12 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
     private String mSocketAddress;
     private String callerId;
 
-    private static final String[] RequiredPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.MODIFY_AUDIO_SETTINGS};
+    private static final String[] RequiredPermissions = {Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS,
+            Manifest.permission.ACCESS_NETWORK_STATE
+    };
     protected PermissionChecker permissionChecker = new PermissionChecker();
 
     @Override
@@ -114,7 +120,7 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
         getWindowManager().getDefaultDisplay().getSize(displaySize);
         PeerConnectionParameters params = new PeerConnectionParameters(
                 true, false, displaySize.x, displaySize.y, 30, 1, VIDEO_CODEC_VP9, true, 1, AUDIO_CODEC_OPUS, true);
-        client = new WebRtcClient(this, mSocketAddress, params, VideoRendererGui.getEGLContext());
+        client = new WebRtcClient(this, mSocketAddress, params);
         //startCam();
     }
 

@@ -10,6 +10,7 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.AudioSource;
+import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
@@ -216,6 +217,11 @@ public class WebRtcClient {
         }
 
         @Override
+        public void onIceConnectionReceivingChange(boolean b) {
+            //todo 11139新增
+        }
+
+        @Override
         public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
         }
 
@@ -259,9 +265,7 @@ public class WebRtcClient {
             this.pc = factory.createPeerConnection(iceServers, pcConstraints, this);
             this.id = id;
             this.endPoint = endPoint;
-
             pc.addStream(localMS); //, new MediaConstraints()
-
             mListener.onStatusChanged("CONNECTING");
         }
     }
@@ -282,12 +286,15 @@ public class WebRtcClient {
         endPoints[peer.endPoint] = false;
     }
 
-    public WebRtcClient(RtcListener listener, String host, PeerConnectionParameters params, EGLContext mEGLcontext) {
+    public WebRtcClient(RtcListener listener, String host, PeerConnectionParameters params) {
         Log.d(TAG, "WebRtcClient() called with: -------------- host = [" + host + "], params = [" + params + "]");
         mListener = listener;
         pcParams = params;
+//        PeerConnectionFactory.initializeAndroidGlobals(listener, true, true,
+//                params.videoCodecHwAcceleration, mEGLcontext);
+        //todo 11139修改
         PeerConnectionFactory.initializeAndroidGlobals(listener, true, true,
-                params.videoCodecHwAcceleration, mEGLcontext);
+                params.videoCodecHwAcceleration);
         factory = new PeerConnectionFactory();
         MessageHandler messageHandler = new MessageHandler();
 
@@ -382,7 +389,11 @@ public class WebRtcClient {
     }
 
     private VideoCapturer getVideoCapturer() {
-        String frontCameraDeviceName = VideoCapturerAndroid.getNameOfFrontFacingDevice();
+        //前置摄像头
+        String frontCameraDeviceName = CameraEnumerationAndroid.getNameOfFrontFacingDevice();
+        /**
+         * 类是一个相机的包装类
+         */
         return VideoCapturerAndroid.create(frontCameraDeviceName);
     }
 }
