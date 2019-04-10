@@ -283,6 +283,7 @@ public class WebRtcClient {
     }
 
     public WebRtcClient(RtcListener listener, String host, PeerConnectionParameters params, EGLContext mEGLcontext) {
+        Log.d(TAG, "WebRtcClient() called with: -------------- host = [" + host + "], params = [" + params + "]");
         mListener = listener;
         pcParams = params;
         PeerConnectionFactory.initializeAndroidGlobals(listener, true, true,
@@ -295,6 +296,7 @@ public class WebRtcClient {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
         client.on("id", messageHandler.onId);
         client.on("message", messageHandler.onMessage);
         client.connect();

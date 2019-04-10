@@ -48,7 +48,7 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
     private String mSocketAddress;
     private String callerId;
 
-    private static final String[] RequiredPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+    private static final String[] RequiredPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.MODIFY_AUDIO_SETTINGS};
     protected PermissionChecker permissionChecker = new PermissionChecker();
 
     @Override
@@ -62,10 +62,8 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
                         | LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | LayoutParams.FLAG_TURN_SCREEN_ON);
         setContentView(R.layout.main);
-        mSocketAddress = "http://" + getResources().getString(R.string.host);
-        mSocketAddress += (":" + getResources().getString(R.string.port) + "/");
 
-        vsv = (GLSurfaceView) findViewById(R.id.glview_call);
+        vsv = findViewById(R.id.glview_call);
         vsv.setPreserveEGLContextOnPause(true);
         vsv.setKeepScreenOn(true);
         VideoRendererGui.setView(vsv, new Runnable() {
@@ -79,6 +77,7 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
         remoteRender = VideoRendererGui.create(
                 REMOTE_X, REMOTE_Y,
                 REMOTE_WIDTH, REMOTE_HEIGHT, scalingType, false);
+
         localRender = VideoRendererGui.create(
                 LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING,
                 LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING, scalingType, true);
@@ -109,12 +108,14 @@ public class RtcActivity extends Activity implements WebRtcClient.RtcListener {
     }
 
     private void init() {
+        mSocketAddress = "http://" + getResources().getString(R.string.host);
+        mSocketAddress += (":" + getResources().getString(R.string.port) + "/");
         Point displaySize = new Point();
         getWindowManager().getDefaultDisplay().getSize(displaySize);
         PeerConnectionParameters params = new PeerConnectionParameters(
                 true, false, displaySize.x, displaySize.y, 30, 1, VIDEO_CODEC_VP9, true, 1, AUDIO_CODEC_OPUS, true);
-
         client = new WebRtcClient(this, mSocketAddress, params, VideoRendererGui.getEGLContext());
+        //startCam();
     }
 
     @Override

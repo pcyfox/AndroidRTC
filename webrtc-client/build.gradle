@@ -3,7 +3,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 15
@@ -21,5 +20,8 @@ android {
 
 dependencies {
     implementation 'com.github.nkzawa:socket.io-client:0.4.2'
-    api 'io.pristine:libjingle:9127@aar'
+   // api 'io.pristine:libjingle:11139@aar'
+       api 'io.pristine:libjingle:9127@aar'
+
+    // implementation 'org.webrtc:google-webrtc:1.0.27485'
 }
