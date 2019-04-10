@@ -2,11 +2,10 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion 27
-
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -21,7 +20,5 @@ android {
 dependencies {
     implementation 'com.github.nkzawa:socket.io-client:0.4.2'
     api 'io.pristine:libjingle:11139@aar'
-    //   api 'io.pristine:libjingle:9127@aar'
-
     // implementation 'org.webrtc:google-webrtc:1.0.27485'
 }
